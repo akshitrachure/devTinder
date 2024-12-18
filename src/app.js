@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 
 
-app.use('/test',(req,res)=>{
+app.use('/tests',(req,res)=>{
     res.end("Hello from server 5000")
 })
 
