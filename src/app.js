@@ -1,33 +1,40 @@
 const express = require('express')
-
+const connectDB = require('./config/database')
+const User = require('./models/user')
 const app = express()
 
-app.use('/test',(req,res,next)=>{
-    console.log("1st handler");
-    // res.send("1st response");
-    next();
-},
-(req,res,next)=>{
-    console.log("2nd handler");
-    // res.send("2nd response");
-    next();
-},
-(req,res,next)=>{
-    console.log("3rd handler");
-    // res.send("3rd response");
-    next();
-},
-(req,res,next)=>{
-    console.log("4th handler");
-    // res.send("4th response");
-    next();
+
+app.post('/signup', async (req,res)=>{
+    const userObj = {
+        firstName: "Chinnu",
+        lastName: "Rachure",
+        emailId: "chinnu@gmail.com",
+        password: "Chinnu@123",
+        age: 25,
+        gender: "Male",
+    }
+
+    try{
+        const user = new User(userObj);
+        await user.save();
+        res.send("User data added to the database");
+    }catch(err){
+        res.status(400).send("Error saving the user: "+ err.message)
+    }
+})
+
+connectDB().then(()=>{
+    console.log("Database connection established");
+    app.listen(5000,()=>{
+        console.log("Server listening on port 5000");    
+    })
+})
+.catch((err)=>{
+    console.error("Database cannot be connected");
 })
 
 
 
-app.listen(5000,()=>{
-    console.log("Server listening on port 5000");    
-})
 
 
 
@@ -35,6 +42,27 @@ app.listen(5000,()=>{
 
 
 
+// Multiple route handlers
+// app.use('/test',(req,res,next)=>{
+//     console.log("1st handler");
+//     // res.send("1st response");
+//     next();
+// },
+// (req,res,next)=>{
+//     console.log("2nd handler");
+//     // res.send("2nd response");
+//     next();
+// },
+// (req,res,next)=>{
+//     console.log("3rd handler");
+//     // res.send("3rd response");
+//     next();
+// },
+// (req,res,next)=>{
+//     console.log("4th handler");
+//     // res.send("4th response");
+//     next();
+// })
 
 
 
