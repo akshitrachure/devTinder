@@ -4,17 +4,73 @@ const User = require('./models/user')
 const app = express()
 
 
-app.post('/signup', async (req,res)=>{
-    const userObj = {
-        firstName: "Chinnu",
-        lastName: "Rachure",
-        emailId: "chinnu@gmail.com",
-        password: "Chinnu@123",
-        age: 25,
-        gender: "Male",
+app.use(express.json())
+
+//Get an user by emailId
+app.get('/user', async (req,res)=>{
+    const userEmail = req.body.emailId;
+    // console.log(userEmail)
+    try{
+        const user = await User.findOne({emailId: userEmail})
+        if(!user){
+            res.status(404).send("User with the given emailId not found")
+        }
+        res.send(user);
+    }catch(err){
+        res.status(400).send("Something went wrong!!")
     }
+})
+
+
+//Get all users in the feed
+app.get('/feed', async (req,res)=>{
+    try{
+        const users = await User.find({});
+        if(users.length===0){
+            res.status(404).send("No users found with the given emailId")
+        }else{
+            res.send(users)
+        }
+    }catch(err){
+        res.status(400).send("Something went wrong!!" + err.message)
+    }
+})
+
+
+//Delete an user
+app.delete("/user", async (req,res)=>{
+    const userId = req.body.userId;
+    try{
+        //const user = await User.findByIdAndDelete({_id:userId}) //This is also correct
+        const user = await User.findByIdAndDelete(userId);
+        res.send("User deleted successfully!!")
+    }catch(err){
+        res.status(400).send("Something went wrong!!" + err.message)
+    }
+})
+
+
+//Update an user
+app.patch('/user', async (req,res)=>{
+    const userId = req.body.userId;
+    const data = req.body
+    try{
+        const user = await User.findByIdAndUpdate(userId, data, {returnDocument: 'after'});
+        console.log(user);        
+        res.send("User is updated successfully!!")
+    }catch(err){
+        res.status(400).send("Something went wrong!! " + err.message);
+    }
+})
+
+
+
+
+app.post('/signup', async (req,res)=>{
+    const userObj = req.body;
 
     try{
+        //Creating a new instance of the User model
         const user = new User(userObj);
         await user.save();
         res.send("User data added to the database");
