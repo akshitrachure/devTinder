@@ -1,91 +1,31 @@
 const express = require('express')
-const connectDB = require('./config/database')
-const User = require('./models/user')
 const app = express()
+const cookieParser = require('cookie-parser')
+
+const User = require('./models/user')
+const connectDB = require('./config/database')
+
+
+const authRouter = require('./routes/auth')
+const profileRouter = require('./routes/profiles')
+const requestRouter = require('./routes/requests')
 
 
 app.use(express.json())
-
-//Get an user by emailId
-app.get('/user', async (req,res)=>{
-    const userEmail = req.body.emailId;
-    // console.log(userEmail)
-    try{
-        const user = await User.findOne({emailId: userEmail})
-        if(!user){
-            res.status(404).send("User with the given emailId not found")
-        }
-        res.send(user);
-    }catch(err){
-        res.status(400).send("Something went wrong!!")
-    }
-})
+app.use(cookieParser())
 
 
-//Get all users in the feed
-app.get('/feed', async (req,res)=>{
-    try{
-        const users = await User.find({});
-        if(users.length===0){
-            res.status(404).send("No users found with the given emailId")
-        }else{
-            res.send(users)
-        }
-    }catch(err){
-        res.status(400).send("Something went wrong!!" + err.message)
-    }
-})
-
-
-//Delete an user
-app.delete("/user", async (req,res)=>{
-    const userId = req.body.userId;
-    try{
-        //const user = await User.findByIdAndDelete({_id:userId}) //This is also correct
-        const user = await User.findByIdAndDelete(userId);
-        res.send("User deleted successfully!!")
-    }catch(err){
-        res.status(400).send("Something went wrong!!" + err.message)
-    }
-})
-
-
-//Update an user
-app.patch('/user/:userId', async (req,res)=>{
-    const userId = req.params.userId;
-    const data = req.body
-    try{
-        const ALLOWED_UPDATES = ["skills", "gender", "age", "photoUrl", "about", "password"]
-
-        const isUpdateAllowed = Object.keys(data).every(k => ALLOWED_UPDATES.includes(k))
-
-        if(!isUpdateAllowed){
-            throw new Error("Updated not allowed")
-        }
-        const user = await User.findByIdAndUpdate(userId, data, {returnDocument: 'after', runValidators: true});
-        console.log(user);        
-        res.send("User is updated successfully!!")
-    }catch(err){
-        res.status(400).send("Something went wrong!! " + err.message);
-    }
-})
+app.use('/', authRouter)
+app.use('/', profileRouter)
+app.use('/', requestRouter)
 
 
 
 
-app.post('/signup', async (req,res)=>{
-    const userObj = req.body;
 
-    try{
-        //Creating a new instance of the User model
-        const user = new User(userObj);
-        await user.save();
-        res.send("User data added to the database");
-    }catch(err){
-        res.status(400).send("Error saving the user: "+ err.message)
-    }
-})
 
+
+//Connect with DB
 connectDB().then(()=>{
     console.log("Database connection established");
     app.listen(5000,()=>{
@@ -97,6 +37,71 @@ connectDB().then(()=>{
 })
 
 
+
+
+//Get an user by emailId
+// app.get('/user', userAuth , async (req,res)=>{
+//     const userEmail = req.body.emailId;
+//     // console.log(userEmail)
+//     try{
+//         const user = await User.findOne({emailId: userEmail})
+//         if(!user){
+//             res.status(404).send("User with the given emailId not found")
+//         }
+//         res.send(user);
+//     }catch(err){
+//         res.status(400).send("Something went wrong!!")
+//     }
+// })
+
+
+// //Get all users in the feed
+// app.get('/feed', userAuth, async (req,res)=>{
+//     try{
+//         const users = await User.find({});
+//         if(users.length===0){
+//             res.status(404).send("No users found with the given emailId")
+//         }else{
+//             res.send(users)
+//         }
+//     }catch(err){
+//         res.status(400).send("Something went wrong!!" + err.message)
+//     }
+// })
+
+
+// //Delete an user
+// app.delete("/user", userAuth, async (req,res)=>{
+//     const userId = req.body.userId;
+//     try{
+//         //const user = await User.findByIdAndDelete({_id:userId}) //This is also correct
+//         const user = await User.findByIdAndDelete(userId);
+//         res.send("User deleted successfully!!")
+//     }catch(err){
+//         res.status(400).send("Something went wrong!!" + err.message)
+//     }
+// })
+
+
+// //Update an user
+// app.patch('/user/:userId', async (req,res)=>{
+//     const userId = req.params.userId;
+//     const data = req.body
+//     try{
+//         const ALLOWED_UPDATES = ["skills", "gender", "age", "photoUrl", "about", "password"]
+
+//         const isUpdateAllowed = Object.keys(data).every(k => ALLOWED_UPDATES.includes(k))
+
+//         if(!isUpdateAllowed){
+//             throw new Error("Updated not allowed")
+//         }
+//         const user = await User.findByIdAndUpdate(userId, data, {returnDocument: 'after', runValidators: true});
+//         console.log(user);        
+//         res.send("User is updated successfully!!")
+//     }catch(err){
+//         res.status(400).send("Something went wrong!! " + err.message);
+//     }
+// })
 
 
 
@@ -126,24 +131,6 @@ connectDB().then(()=>{
 //     // res.send("4th response");
 //     next();
 // })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
