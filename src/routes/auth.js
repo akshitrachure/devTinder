@@ -15,10 +15,8 @@ authRouter.use(cookieParser())
 //Signup
 authRouter.post('/signup', async (req,res)=>{
     try{
-        console.log("TOP")
         //Validate the data
         validateSignupData(req);
-        console.log("HERE")
         const {firstName, lastName, emailId, password, age, skills, gender} = req.body
         
         //Encrypt the password
@@ -66,6 +64,14 @@ authRouter.post('/login', async (req,res)=>{
     }catch(err){
         res.status(400).send("ERROR: "+ err.message)
     }
+})
+
+
+
+//Logout
+authRouter.post('/logout', async (req, res) => {
+    res.cookie('token', null, {expires: new Date(Date.now())})
+    res.send("Logout successful")
 })
 
 

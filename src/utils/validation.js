@@ -2,6 +2,7 @@ const validator = require('validator')
 
 const validateSignupData = (req) => {
     const {firstName, lastName, emailId, password, age, gender, photoUrl} = req.body
+
     if(!firstName || !lastName){
         throw new Error("Please enter firstname and lastname")
     }else if(firstName.length<4 || firstName.length>50){
@@ -17,6 +18,16 @@ const validateSignupData = (req) => {
     }
 }
 
+
+const validateProfileEditData = (req) => {
+    const allowedEditFields = ["firstName", "lastName", "gender", "age", "about", "skills", "emailId", "photoUrl"]
+
+    const isEditAllowed = Object.keys(req.body).every(field => allowedEditFields.includes(field));
+    
+    return isEditAllowed
+}
+
 module.exports = {
     validateSignupData,
+    validateProfileEditData,
 }
