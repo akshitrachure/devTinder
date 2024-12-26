@@ -10,9 +10,9 @@ const profileRouter = express.Router()
 profileRouter.get('/profile/view', userAuth, async (req, res)=>{
     try{
         const user = req.user;
-        res.send(user)
+        res.json({message: "User Data fetched" , data: user})
     }catch(err){
-        res.status(400).send("ERROR: " + err.message);
+        res.status(400).json({message: "ERROR: "+ err.message, data: "ERROR: "+ err.message})
     }
 })
 
@@ -30,10 +30,10 @@ profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
         Object.keys(req.body).forEach(field => loggedInUser[field] = req.body[[field]])
 
         await loggedInUser.save();
-        res.send(`${loggedInUser.firstName}, your profile is updated successfully!`);
+        res.json({message: `${loggedInUser.firstName}, your profile is updated successfully!`, data: `${loggedInUser.firstName}, your profile is updated successfully!`});
 
     }catch(err){
-        res.status(400).send("ERROR: " + err.message);
+        res.status(400).json({message: "ERROR: "+ err.message, data: "ERROR: "+ err.message})
     }
 })
 

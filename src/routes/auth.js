@@ -12,6 +12,9 @@ authRouter.use(express.json())
 authRouter.use(cookieParser())
 
 
+const USER_SAFE_DATA = "firstName lastName age gender about photoUrl skills"
+
+
 //Signup
 authRouter.post('/signup', async (req,res)=>{
     try{
@@ -27,9 +30,9 @@ authRouter.post('/signup', async (req,res)=>{
             firstName, lastName, emailId, password: passwordHash, age, gender, skills
         });
         await user.save();
-        res.send("User data added to the database");
+        res.json({message: "User data added to the database", data: "User data added to the database"});
     }catch(err){
-        res.status(400).send("ERROR: "+ err.message)
+        res.status(400).json({message: "ERROR: "+ err.message, data: "ERROR: "+ err.message})
     }
 })
 
@@ -44,6 +47,7 @@ authRouter.post('/login', async (req,res)=>{
         }
 
         const user = await User.findOne({emailId: emailId})
+        // .select(USER_SAFE_DATA)
         if(!user){
             throw new Error("Invalid Credentials!!")
         }
@@ -58,11 +62,11 @@ authRouter.post('/login', async (req,res)=>{
 
             //Create a cookie and send it in the response to the user
             res.cookie('token', token, {expires: new Date(Date.now() + 7 * 24 * 3600000)}) // expires in 8hours
-            res.send("Login successful!!")
+            res.json({message: "Login successful!!", data: user})
         }
 
     }catch(err){
-        res.status(400).send("ERROR: "+ err.message)
+        res.status(400).json({message: "ERROR: "+ err.message, data: "ERROR: "+ err.message})
     }
 })
 
@@ -71,7 +75,7 @@ authRouter.post('/login', async (req,res)=>{
 //Logout
 authRouter.post('/logout', async (req, res) => {
     res.cookie('token', null, {expires: new Date(Date.now())})
-    res.send("Logout successful")
+    res.json({message: "Logout successful", data: "Logout successful"})
 })
 
 
