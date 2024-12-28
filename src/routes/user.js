@@ -22,7 +22,7 @@ userRouter.get('/user/requests/received', userAuth, async (req, res) => {
         }).populate("fromUserId", USER_SAFE_DATA)
      // }).populate("fromUserId", ["firstName", "lastName", "age", "about", "photoUrl"])
 
-        res.json({message: "Data fetched successfully!!",  connectionRequestData})
+        res.json({message: "Data fetched successfully!!",  data: connectionRequestData})
 
     }
     catch(err){
