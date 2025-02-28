@@ -11,11 +11,12 @@ const validateSignupData = (req) => {
         throw new Error("Please enter a valid email address")
     }else if(!validator.isStrongPassword(password)){
         throw new Error("Please enter a strong password")
-    }else if(age<18){
-        throw new Error("The minimum age limit is 18")
-    }else if(!['Male','Female','Others'].includes(gender)){
-        throw new Error("Please select a valid gender")
     }
+    // else if(age<18){
+    //     throw new Error("The minimum age limit is 18")
+    // }else if(!['Male','Female','Others'].includes(gender)){
+    //     throw new Error("Please select a valid gender")
+    // }
 }
 
 

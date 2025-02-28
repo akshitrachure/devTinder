@@ -11,7 +11,7 @@ const USER_SAFE_DATA = "firstName lastName age gender about photoUrl skills"
 
 
 
-//GET all the pending connection requests for the loggedIn user
+//GET all the pending connection requests received by the loggedIn user
 userRouter.get('/user/requests/received', userAuth, async (req, res) => {
     try{
         const loggedInUser = req.user
