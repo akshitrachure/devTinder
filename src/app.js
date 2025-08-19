@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
-
+require('dotenv').config()
 
 const User = require('./models/user')
 const connectDB = require('./config/database')
@@ -33,7 +33,7 @@ app.use('/', userRouter)
 //Connect with DB
 connectDB().then(()=>{
     console.log("Database connection established");
-    app.listen(5000,()=>{
+    app.listen(process.env.PORT,()=>{
         console.log("Server listening on port 5000");    
     })
 })

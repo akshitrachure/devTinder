@@ -103,9 +103,9 @@ Body
 
     - purchased domain name from godaddy
     - signup on cloudflare & add a new domain name
-    - change the nameservers on godaddy and point it to cloudflare
+    - change the nameservers on godaddy/namecheap(in my case) and point it to cloudflare
     - wait for sometime till your nameservers are updated ~15 minutes
-    - DNS record: A devtinder.in 43.204.96.49
+    - Add a DNS record i.e "A" record - devtinder.site 16.171.1.19
     - Enable SSL for website 
 
 
