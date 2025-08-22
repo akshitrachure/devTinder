@@ -14,6 +14,9 @@ const profileRouter = require('./routes/profiles')
 const requestRouter = require('./routes/requests')
 const userRouter = require('./routes/user')
 
+//FOR RAZORPAY INTEGRATION
+const paymentRouter = require('./routes/payment')
+
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -28,6 +31,9 @@ app.use('/', authRouter)
 app.use('/', profileRouter)
 app.use('/', requestRouter)
 app.use('/', userRouter)
+
+//FOR RAZORPAY INTEGRATION
+// app.use('/', paymentRouter)
 
 
 
