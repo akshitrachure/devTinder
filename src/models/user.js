@@ -47,6 +47,14 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    //FOR RAZORPAY INTEGRATION
+    // isPremium: {
+    //     type: Boolean,
+    //     default: false,
+    // },
+    // membershipType: {
+    //     type: String,
+    // },
     photoUrl: {
         type: String,
         default: "https://th.bing.com/th/id/OIP.sP_Fy-jUeB7gAQ9ovXho_wHaF7?rs=1&pid=ImgDetMain",
