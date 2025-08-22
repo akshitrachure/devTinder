@@ -74,6 +74,30 @@ Body
         - Modify the BASEURL in frontend project to "/api"
 
 
+    From the 2nd time onwards perform deployment as follows:
+    - Frontend:
+        - cd devFinderWeb
+        - ensure you are on the main branch else do git checkout main
+        - git pull
+        - npm i (if any new dependencies are installed)
+        - npm run build
+        - sudo scp -r dist/* /var/www/html
+        - DONE
+
+    - Backend:
+        - cd devTinder
+        - ensure you are on the main branch else do git checkout main
+        - git pull
+        - npm i (if any new dependencies are installed)
+        - sudo nano .env (to add new .env file entries)
+            - edit the .env files 
+        - pm2 list (check the app name)
+        - pm2 restart 0 (0 is the app name that you want to run)    
+        - DONE
+
+    You can find the errors (if found) in pm2 logs
+
+
 
 # Ngxinx config: 
 
