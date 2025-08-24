@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 require('dotenv').config()
 require("./utils/cronjob");
+const http = require("http")
 
 const User = require('./models/user')
 const connectDB = require('./config/database')
@@ -13,6 +14,8 @@ const authRouter = require('./routes/auth')
 const profileRouter = require('./routes/profiles')
 const requestRouter = require('./routes/requests')
 const userRouter = require('./routes/user')
+const chatRouter = require("./routes/chat");
+const initializeSocket = require('./utils/socket')
 
 
 app.use(cors({
@@ -28,13 +31,17 @@ app.use('/', authRouter)
 app.use('/', profileRouter)
 app.use('/', requestRouter)
 app.use('/', userRouter)
+app.use('/', chatRouter)
 
+
+const server = http.createServer(app);
+initializeSocket(server)
 
 
 //Connect with DB
 connectDB().then(()=>{
     console.log("Database connection established");
-    app.listen(process.env.PORT,()=>{
+    server.listen(process.env.PORT,()=>{
         console.log("Server listening on port 5000");    
     })
 })
